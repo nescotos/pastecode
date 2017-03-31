@@ -81,3 +81,26 @@ class TestCode(object):
             assert data['status'] == True
             assert data['code']['code'] == 'var j = 7; \n var l = 14;'
 
+
+    def test_delete_specific_code(self):
+        with app.test_client(self) as client:
+            response = client.delete('/code/{0}'.format(self.code_id),
+            headers={
+                'Authorization' : self.bearer
+            })
+            data = json.loads(response.data)
+            assert response.status_code == 200
+            assert data['status'] == True
+            assert data['message'] == 'Code Deleted'
+
+            
+    def test_delete_specific_code_with_invalid_id(self):
+        with app.test_client(self) as client:
+            response = client.delete('/code/85965',
+            headers={
+                'Authorization' : self.bearer
+            })
+            data = json.loads(response.data)
+            assert response.status_code == 200
+            assert data['status'] == False
+            assert data['message'] == 'Code does not exist o does not belong to you'

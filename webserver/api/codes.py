@@ -39,7 +39,18 @@ class CodeAPIById(Resource):
                 return jsonify(dict(status=True, message='Updated'))
             except ValueError:
                 return jsonify(dict(status=False, message='Something Went Wrong', error=ValueError.message))
-        return jsonify(dict(status=False, message='Code does not exist or do not belong to you'))
+        return jsonify(dict(status=False, message='Code does not exist or does not belong to you'))
+
+    @jwt_required
+    def delete(self, code_id):
+        code_to_delete = Code.query.filter_by(_id=code_id).first()
+        if code_to_delete is not None and code_to_delete.owner_id is get_jwt_identity():
+            try:
+                code_to_delete.delete()
+                return jsonify(dict(status=True, message='Code Deleted'))
+            except:
+                return jsonify(dict(status=False, message='Something Went Wrong'))
+        return jsonify(dict(status=False, message='Code does not exist o does not belong to you'))
 
 
     def get(self, code_id):

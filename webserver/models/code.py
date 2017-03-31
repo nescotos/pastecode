@@ -30,5 +30,9 @@ class Code(rest_db.Model):
         except:
             rest_db.session.rollback()
 
+    def delete(self):
+        rest_db.session.delete(self)
+        rest_db.session.commit()
+
 
 
