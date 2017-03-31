@@ -11,6 +11,7 @@ class User(rest_db.Model):
     name = Column('name', String(50))
     email = Column(String(50))
     password = Column(String(250))
+    codes = relationship('Code', backref='users')
 
 
     def __init__(self, args):
